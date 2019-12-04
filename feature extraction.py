@@ -10,12 +10,13 @@ def showKeyPoints(imageName: str):
     keyPoints = sift.detect(grayscaleImage, None)
 
     print(keyPoints)
-    imageWithKeyPoints = cv2.drawKeypoints(grayscaleImage, keyPoints, image)
+    # imageWithKeyPoints = cv2.drawKeypoints(grayscaleImage, keyPoints, image)    # Prints the grayscale image.
+    imageWithKeyPoints = cv2.drawKeypoints(image, keyPoints, image)    # Prints the colored image.
 
     cv2.imshow("Image with key points", imageWithKeyPoints)
     cv2.waitKey(0)
 
 
-imageNames = ["goldengate/goldengate-00.png", "goldengate/goldengate-01.png", "goldengate/goldengate-02.png", "goldengate/goldengate-03.png", "goldengate/goldengate-04.png", "goldengate/goldengate-05.png"]
+imageNames = ["images/goldengate/goldengate-00.png", "images/goldengate/goldengate-01.png", "images/goldengate/goldengate-02.png", "images/goldengate/goldengate-03.png", "images/goldengate/goldengate-04.png", "images/goldengate/goldengate-05.png"]
 for anImageName in imageNames:
     showKeyPoints(anImageName)
