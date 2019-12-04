@@ -32,10 +32,38 @@ def matchFeaturesWithORB(imageName1, imageName2):
     imageWithSortedMatches = cv2.drawMatches(image1, keyPoints1, image2, keyPoints2, sortedMatches[:10], None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
 
     # Plot with either matplotlib or opencv. matplotlib is laggy and is not recommended.
-    cv2.imshow("Sorted matches", imageWithSortedMatches)
+    cv2.imshow("ORB Feature Matching", imageWithSortedMatches)
     cv2.waitKey(0)
     # plt.imshow(imageWithSortedMatches)
     # plt.show()
 
 
-matchFeaturesWithORB("images/goldengate/goldengate-00.png", "images/goldengate/goldengate-01.png")
+def matchFeaturesWithSIFT(imageName1, imageName2):
+    image1 = cv2.imread(imageName1)
+    image2 = cv2.imread(imageName2)
+
+    # MARK: Extract features with SIFT
+    sift = cv2.xfeatures2d.SIFT_create()
+
+    keyPoints1, descriptors1 = sift.detectAndCompute(image1, None)
+    keyPoints2, descriptors2 = sift.detectAndCompute(image2, None)
+
+    # MARK: Match features
+    bf = cv2.BFMatcher()
+
+    matches = bf.knnMatch(descriptors1, descriptors2, k=2)
+
+    # Matching ratio test.
+    good = []
+    for m, n in matches:
+        if (m.distance < 0.75 * n.distance):
+            good.append(([m]))
+
+    imageWithSortedMatches = cv2.drawMatchesKnn(image1, keyPoints1, image2, keyPoints2, good, None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
+
+    cv2.imshow("SIFT Feature Matching", imageWithSortedMatches)
+    cv2.waitKey(0)
+
+
+# matchFeaturesWithORB("images/goldengate/goldengate-00.png", "images/goldengate/goldengate-01.png")
+matchFeaturesWithSIFT("images/goldengate/goldengate-00.png", "images/goldengate/goldengate-01.png")
